@@ -4,7 +4,8 @@ use strict;
 use warnings;
 
 use Carp qw( croak );
-our $VERSION = '0.01';
+our $VERSION = '0.02';
+
 
 sub new {
     my $class = shift;
@@ -237,6 +238,42 @@ early due to demand.  You have been warned.
 
 =head1 OBJECT METHODS
 
+=over 4
+
+=item new( root => $path );
+
+root is optional, and defaults to /.  root is prepended to all paths after
+resolution
+
+=item cwd()
+
+Returns the current working directory (virtual)
+
+=item root() or root( $path )
+
+Gets or sets the root path.  This path is prepended to the path returned
+from _path_from_root
+
+=item _path_from_root( $path )
+
+Resolves a path, with the root path prepended.
+
+This is a private method, do not document it in your subclass.
+
+=item _resolve_path( $path )
+
+Resolves a path to a normalized direct path based on the cwd, allowing .. 
+traversal, and the ~ home directory shortcut (if home_path is defined)
+
+For example, if the cwd is /foo/bar/baz, and $path is 
+/../../../../foo/../foo/./bar/../foo then /foo will be returned
+
+This is a private method, do not document it in your subclass.
+
+=back
+
+=head1 CALLBACK METHODS
+
 All of these work exactly like the L<IO::AIO> methods of the same name.  Use IO::AIO 
 as a reference for these functions, but note that this in no way requires you to use
 IO::AIO.
@@ -301,28 +338,6 @@ IO::AIO.
 
 =back
 
-=over 4
-
-=item cwd()
-
-Returns the current working directory (virtual)
-
-=item root() or root($path)
-
-Gets or sets the root path.  This path is prepended to the path returned from _path_from_root
-
-=item _path_from_root($path)
-
-Resolves a path, with the root path prepended
-
-=item _resolve_path($path)
-
-Resolves a path to a normalized direct path based on the cwd, allowing .. traversal, and the ~ home directory shortcut (if home_path is defined)
-
-For example, if the cwd is /foo/bar/baz, and $path is /../../../../foo/../foo/./bar/../foo then /foo will be returned
-
-=back
-
 =head1 SEE ALSO
 
 L<Filesys::Virtual::Async::Plain>
@@ -331,7 +346,7 @@ L<http://xant.us/>
 
 =head1 AUTHOR
 
-David Davis E<lt>xantus@cpan.orgE<gt>
+David W Davis E<lt>xantus@cpan.orgE<gt>
 
 =head1 RATING
 
@@ -340,7 +355,7 @@ L<http://cpanratings.perl.org/rate/?distribution=Filesys::Virtual::Async>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2009 by David Davis
+Copyright (c) 2009 by David W Davis, All rights reserved
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself

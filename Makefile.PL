@@ -6,6 +6,7 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     'NAME'			=> 'Filesys::Virtual::Async',
     'VERSION_FROM'	=> 'Async.pm', # finds $VERSION
+    'LICENSE'       => 'perl',
     'PREREQ_PM'		=> {
         'Carp'                          => undef,
     },
@@ -14,4 +15,9 @@ WriteMakefile(
 		'DIST_DEFAULT' => 'all tardist',
 		'COMPRESS'     => 'gzip -9vf',
 	},
+    ( $] >= 5.005 ? (
+        ABSTRACT_FROM   => 'Async.pm',
+		AUTHOR          => 'David Davis <xantus@cpan.org>'
+      ) : ()
+    ),
 );
